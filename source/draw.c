@@ -2,6 +2,7 @@
 #include "memory.h"
 #include "fatfs/ff.h"
 #include "types.h"
+#include "hid.h"
 
 #define MAX_SIZE	(50*1024*1024)
 #define LOAD_ADDR	0x24000000
@@ -38,9 +39,9 @@ void delay(u32 n) {
 void drawBootScreen() {
 	clearScreen(); // clear the screen
 
-	char *config      = "/anim/config";
-	char *top_anim    = "/anim/anim";
-	char *bottom_anim = "/anim/anim_bottom"; // define file names
+	char *config      = "/anim/fps";
+	char *top_anim    = "/anim/top";
+	char *bottom_anim = "/anim/bottom"; // define file names
 
 	u8 rate = 15; // Default, overridden by config
 	u32 topAnimSize, topFrames = 0, bottomAnimSize, bottomFrames = 0; // frameRate
@@ -79,6 +80,11 @@ void drawBootScreen() {
 	u32 delay__ = (delay_ / 2); // FIXME - THIS IS NOT OKAY.
 
 	for (u32 curframe = 0; curframe < frames; curframe++) { // loop until the maximum amount of frames, increasing frame count by 1
+		// THIS HAS BEEN PARTIALLY CALIBRATED
+		if (checkAnyDown()) {
+			break;
+		}
+
 		if (topAnimSize != 0 && curframe < topFrames) { // if top animation exists and hasn't ended yet
 			f_read(&bgr_anim_top, framebuffers->top_left, TOP_FB_SZ,    &put_top); // AKA Read to the framebuffer directly.
 
@@ -96,7 +102,6 @@ void drawBootScreen() {
 			else
 				delay(delay_); // whole delay
 		}
-		// THIS HAS BEEN PARTIALLY CALIBRATED
 	}
 
 	f_close(&bgr_anim_bot);

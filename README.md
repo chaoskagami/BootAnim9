@@ -23,6 +23,10 @@ Please note that if you want to create a bottom screen animation, you have to us
 
 Inside the anim directory there should be a 'config' file. The sole purpose of this file is to indicate the framerate of **
 
+# Okay, this 'press_any_key_to_skip branch' is...?
+
+Any key automatically cancels the animation and boots the console. As an added benefit, no delays on boot if you're attempting to get to D9 or something.
+
 # Credits
 
 b1l1s for his ctr library and fs functions
