@@ -12,7 +12,7 @@ struct framebuffer_t { // thsnks to mid-kid for fb offsets
 };
 struct framebuffer_t* framebuffers = (struct framebuffer_t *) 0x23FFFE00;
 
-void clearCol(u8 b, u8 g, u8 g) {
+void clearCol(u8 b, u8 g, u8 r) {
 	u8* copy_top = framebuffers->top_left;
 	u8* copy_bot = framebuffers->bottom;
 
@@ -36,6 +36,8 @@ void delay(u32 n) {
 	(((a) > (b)) ? (a) : (b))
 
 void animationLoop() {
+	FIL bgr_anim_bot, bgr_anim_top;
+
 	char *config      = "/anim/fps";
 	char *top_anim    = "/anim/top";
 	char *bottom_anim = "/anim/bot"; // define file names
@@ -66,17 +68,12 @@ void animationLoop() {
 		f_read(&config_fil, &rate, 1, &sink); // Someone could create an invalid config.
 	}
 
-	FIL bgr_anim_bot, bgr_anim_top;
-	unsigned int put_bot, put_top;
-
 	if (topFrames > 0) {
 		f_open(&bgr_anim_top, top_anim, FA_READ);
-		put_top = 0;
 	}
 
 	if (bottomFrames > 0) {
 		f_open(&bgr_anim_bot, bottom_anim, FA_READ);
-		put_bot = 0;
 	}
 
 	u32 maxFrames = max(topFrames, bottomFrames); // Get the maximum amount of frames between the two animations

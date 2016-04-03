@@ -1,5 +1,7 @@
 rwildcard = $(foreach d, $(wildcard $1*), $(filter $(subst *, %, $2), $d) $(call rwildcard, $d/, $2))
 
+PATH := $(PATH):$(DEVKITARM)/bin
+
 CC := arm-none-eabi-gcc
 AS := arm-none-eabi-as
 LD := arm-none-eabi-ld
@@ -19,11 +21,11 @@ objects = $(patsubst $(dir_source)/%.s, $(dir_build)/%.o, \
 			  $(call rwildcard, $(dir_source), *.s *.c)))
 
 .PHONY: all
-all: arm9loaderhax.bin arm9payload.bin
+all: external arm9loaderhax.bin arm9payload.bin
 
 .PHONY: clean
-clean:
-	@rm -rf $(dir_build) arm9loaderhax.bin arm9payload.bin
+clean: external_clean
+	@rm -rf $(dir_build) arm9loaderhax.bin arm9payload.bin $(dir_source)/chain.h
 
 arm9loaderhax.bin: $(dir_build)/main.bin
 	@cp -av $(dir_build)/main.bin $@
@@ -45,5 +47,14 @@ $(dir_build)/%.o: $(dir_source)/%.c
 $(dir_build)/%.o: $(dir_source)/%.s
 	@mkdir -p "$(@D)"
 	$(COMPILE.s) $(OUTPUT_OPTION) $<
+
+external:
+	@make -C external_loader
+	@cp external_loader/external_loader.bin chain.bin
+	@xxd -i chain.bin > $(dir_source)/chain.h
+	@rm chain.bin
+
+external_clean:
+	@make -C external_loader clean
 
 include $(call rwildcard, $(dir_build), *.d)
