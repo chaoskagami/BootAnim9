@@ -1,26 +1,24 @@
 #include "loader.h"
 
 char *payloads[] = {
-	PB("none"),
-	PB("a"),
-	PB("b"),
-	PB("select"),
-	PB("start"),
-	PB("right"),
-	PB("left"),
-	PB("up"),
-	PB("down"),
-	PB("r"),
-	PB("l"),
-	PB("x"),
-	PB("y"),
-	PB("zl"),
-	PB("zr")
+	PB(none),
+	PB(a),
+	PB(b),
+	PB(select),
+	PB(start),
+	PB(right),
+	PB(left),
+	PB(up),
+	PB(down),
+	PB(r),
+	PB(l),
+	PB(x),
+	PB(y)
 };
 
 char* getPayloadName() { // Check whether the payload exists, returns the name if so, otherwise returns NULL
 	uint32_t pad = HID_PAD;
-	if        (pad & BUTTON_A) {
+	if (pad & BUTTON_A) {
 		return payloads[1];
 	} else if (pad & BUTTON_B) {
 		return payloads[2];
@@ -44,11 +42,8 @@ char* getPayloadName() { // Check whether the payload exists, returns the name i
 		return payloads[11];
 	} else if (pad & BUTTON_Y) {
 		return payloads[12];
-	} else if (pad & BUTTON_ZL) {
-		return payloads[13];
-	} else if (pad & BUTTON_ZR) {
-		return payloads[14];
 	}
+
 	return payloads[0];
 }
 

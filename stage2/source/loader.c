@@ -6,11 +6,8 @@ void die() {
 }
 
 void loader() {
-    FATFS fs;
     FIL payload_file;
-    uint32_t br;
-
-    f_mount(&fs, "0:", 1);
+    unsigned int br;
 
 	char *payload = getPayloadName();
 	if (!f_exists(payload))

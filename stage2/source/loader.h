@@ -17,7 +17,7 @@ struct framebuffer_t { // Thanks to mid-kid for the framebuffer structure
 
 #define PAYLOAD_ADDRESS	0x23F00000
 
-#define PB(a) "/anim/boot/" a ".bin"
+#define PB(a) "/anim/boot/" #a ".bin"
 
 #define BUTTON_A        (1 << 0)
 #define BUTTON_B        (1 << 1)

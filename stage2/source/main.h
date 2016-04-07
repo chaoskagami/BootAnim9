@@ -57,3 +57,4 @@ u32 fileSize(const char *path);
 void memcpy(void *dest, void *src, u32 size);
 void memset(void *destination, u32 data, u32 len);
 void clear_color(u8 b, u8 g, u8 r);
+void loader();
