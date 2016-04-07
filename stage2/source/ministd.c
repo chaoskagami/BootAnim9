@@ -1,4 +1,4 @@
-#include "ministd.h"
+#include "main.h"
 
 void memcpy(void *dest, void *src, u32 size) {
 	u8* dst8 = (u8*)dest;

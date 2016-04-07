@@ -1,5 +1,4 @@
-#include "fs.h"
-#include "fatfs/ff.h"
+#include "main.h"
 
 static FATFS fs;
 

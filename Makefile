@@ -9,7 +9,7 @@ OC := arm-none-eabi-objcopy
 
 name := BootAnim9
 
-dir_source := source
+dir_source := stage1
 dir_data := data
 dir_build := build
 
@@ -49,12 +49,12 @@ $(dir_build)/%.o: $(dir_source)/%.s
 	$(COMPILE.s) $(OUTPUT_OPTION) $<
 
 external:
-	@make -C external_loader
-	@cp external_loader/external_loader.bin chain.bin
+	@make -C stage2
+	@cp stage2/stage2.bin chain.bin
 	@xxd -i chain.bin > $(dir_source)/chain.h
 	@rm chain.bin
 
 external_clean:
-	@make -C external_loader clean
+	@make -C stage2 clean
 
 include $(call rwildcard, $(dir_build), *.d)

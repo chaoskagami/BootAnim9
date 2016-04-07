@@ -29,28 +29,23 @@ INCLUDES	:=	include source/fatfs  source/fatfs/sdmmc
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH	:=	-mthumb -mthumb-interwork
-
-CFLAGS	:=	-g -Wall -Os\
-			-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
-			-ffast-math -Wno-main -std=c99\
-			$(ARCH)
+ASFLAGS := -mlittle-endian -mcpu=arm946e-s -march=armv5te
+CFLAGS := -Wall -Wextra -MMD -MP -marm $(ASFLAGS) -fno-builtin -fshort-wchar -Wno-main -fomit-frame-pointer -std=c11 -Wno-main -Os -ffast-math
 
 CFLAGS	+=	$(INCLUDE) -DARM9
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
 
-ASFLAGS	:=	-g $(ARCH)
-LDFLAGS	=	-nostartfiles -g --specs=../stub.specs $(ARCH) -Wl,-Map,$(TARGET).map
+LDFLAGS	=	-nostartfiles -g --specs=../stub.specs -Wl,-Map,$(TARGET).map
 
-LIBS	:= 
+LIBS	:=
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
 LIBDIRS	:=
-  
+
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
 # rules for different file extensions
