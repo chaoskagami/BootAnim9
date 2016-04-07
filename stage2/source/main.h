@@ -1,3 +1,6 @@
+#ifndef __MAIN_H
+#define __MAIN_H
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -58,3 +61,5 @@ void memcpy(void *dest, void *src, u32 size);
 void memset(void *destination, u32 data, u32 len);
 void clear_color(u8 b, u8 g, u8 r);
 void loader();
+
+#endif

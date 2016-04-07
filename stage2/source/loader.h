@@ -1,5 +1,9 @@
 #ifndef __MAIN_H
 #define __MAIN_H
+// Yes, the guard is the same as main.h.
+// These both provide all the same definitions.
+// I'll need to unify them later, but there's a reason why
+// it isn't pragma once.
 
 #include "fatfs/ff.h"
 #include <stdint.h>
@@ -31,10 +35,10 @@ struct framebuffer_t { // Thanks to mid-kid for the framebuffer structure
 #define BUTTON_L        (1 << 9)
 #define BUTTON_X        (1 << 10)
 #define BUTTON_Y        (1 << 11)
-#define BUTTON_ZL       (1 << 14)
-#define BUTTON_ZR       (1 << 15)
+/* FIXME - I had ZR and ZL in, but they don't appear to
+           behave rationally without some initialization. */
 
-#define BUTTON_ANY      0xffff
+#define BUTTON_ANY      0xFFF
 
 #define HID_PAD         ((*(volatile uint32_t *)0x10146000) ^ BUTTON_ANY)
 
