@@ -4,12 +4,56 @@ void delay(u32 n) {
 	u32 i = n; while (i--) __asm("andeq r0, r0, r0"); // ASM NOP(e), supposed to delay animation
 }
 
+int read_config(char* buffer) {
+	/* TODO - actually parse like a config file rather than dumb string reading
+              strtok will be handy for this */
+
+	FIL config;
+	unsigned int sink;
+
+	if(f_open(&config, "/anim/config.txt", FA_READ)) {
+		// Open failed. Return 0.
+		return 0;
+	}
+
+	u32 size = min(f_size(&config), 4096);
+
+	memset(buffer, 0, 4096);
+
+	f_read(&config, buffer, size, &sink);
+
+	f_close(&config);
+
+	// One last fixup - get rid of any \r and \n
+	for(int i=0; buffer[i] != 0; i++) {
+		if (buffer[i] == '\n' || buffer[i] == '\r') {
+			buffer[i] = '\0';
+			break;
+		}
+	}
+	return 1;
+}
+
 void animationLoop() {
 	FIL bgr_anim_bot, bgr_anim_top;
 
-	char *config      = "/anim/fps";
-	char *top_anim    = "/anim/top";
-	char *bottom_anim = "/anim/bot"; // define file names
+	char fps_anim[4096]    = "/anim/"; // 4096 is okay here, since MAX_PATH is 4096 on Fat32.
+	char top_anim[4096]    = "/anim/";
+	char bottom_anim[4096] = "/anim/";
+	char buffer[4096];
+
+	if (!read_config(buffer)) {
+		// Couldn't load configuration, time to bounce.
+		return;
+	}
+
+	strcat(fps_anim, buffer);
+	strcat(top_anim, buffer);
+	strcat(bottom_anim, buffer);
+
+	strcat(fps_anim,    "/fps");
+	strcat(top_anim,    "/top");
+	strcat(bottom_anim, "/bot");
 
 	u8 rate = 15; // Default, overridden by config
 	u32	topAnimSize = 0, topFrames = 0,	bottomAnimSize = 0,	bottomFrames = 0, configSize = 0;
@@ -19,7 +63,7 @@ void animationLoop() {
 
 	topAnimSize 	= fileSize(top_anim);    // get top screen animation size
 	bottomAnimSize 	= fileSize(bottom_anim); // get bottom screen animation size
-	configSize 	    = fileSize(config);
+	configSize 	    = fileSize(fps_anim);
 
 	if (topAnimSize == 0 && bottomAnimSize == 0) return; // No animation, just chain already
 
@@ -33,8 +77,9 @@ void animationLoop() {
 	if (configSize)
 	{
 		FIL config_fil;
-		f_open(&config_fil, config, FA_READ);
+		f_open(&config_fil, fps_anim, FA_READ);
 		f_read(&config_fil, &rate, 1, &sink); // Someone could create an invalid config.
+		f_close(&config_fil);
 	}
 
 	if (topFrames > 0)
@@ -76,5 +121,5 @@ void animationLoop() {
 
 		// THIS HAS BEEN PARTIALLY CALIBRATED
 	}
-	// No, I did not forget to f_close() the files. This (somehow) caused a bug that has been fixed by removing these calls
+	// FIXME - f_close plxkthxbaiwhatever
 }

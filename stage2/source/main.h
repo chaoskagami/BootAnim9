@@ -54,11 +54,15 @@ typedef volatile u64         vu64;
 #define max(a, b) \
 	(((a) > (b)) ? (a) : (b))
 
+#define min(a, b) \
+	(((a) < (b)) ? (a) : (b))
+
 void animationLoop();
 u32 mountSDMC(void);
 u32 fileSize(const char *path);
 void memcpy(void *dest, void *src, u32 size);
 void memset(void *destination, u32 data, u32 len);
+void strcat(char *destination, char* src);
 void clear_color(u8 b, u8 g, u8 r);
 void loader();
 

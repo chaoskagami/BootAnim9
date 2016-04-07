@@ -3,7 +3,7 @@ Custom boot animations for A9LH
 
 # How to install
 Compile with 'make' and copy the resulting arm9loaderhax.bin to your SD card root directory.
-Generate your custom animation(s) and copy it/them to your SD card root as /anim/top and /anim/bot
+Generate your custom animation(s) and copy it/them to your SD card root as /anim/<name>/top and /anim/<name>/bot. Put <name> in /anim/config.txt.
 
 After displaying the animations, it will load and launch a payload from /anim/boot/{button}.bin where {button} is what you held.
 
@@ -24,19 +24,22 @@ Please note that if you want to create a bottom screen animation, you have to us
 Inside the anim directory there should be a 'fps' file. The sole purpose of this file is to indicate the framerate of the animations, and you have to indicate it in hex.
 For example, if your framerate is 15, then the only char in 'config' should be 0x0F (or ASCII char 15). An easy way to do this for linux users is the shell builtin printf: `printf '%c' 15 > fps`
 
-In the case that you currently don't have the 'xxd' utility (you should tho) you can use 'bin2c', however some changes will be required.
 
 ## About this branch
 
-This is the land of unstable shit. Tread with caution - I use most of this myself. It should be safe, but no warranty (what warranty?) etc etc.
+This is the land of unstable shit. Tread with caution - I use most of this myself. It should be safe, but no warranty (What warranty? You're using a9lh anyways.)
 
 There's multiple changes in this branch, the most obvious being takeover of BootCTR9/CtrBootManager9's job. It's only capable of loading bin files.
 
-The other major change here is that all functionality has been moved to stage2, and stage1 has been replaced with a stub. This means payloads load near instantly after aborting via button.
+Another major change here is that all functionality has been moved to stage2, and stage1 has been replaced with a stub. This means payloads load near instantly after aborting via button.
+
+Animations are loaded from named subdirectories with the set animation read from /anim/config.txt. This is subject to change obviously.
 
 Aside from this, filenames for animations were changed to personal taste. This will hopefully become irrelevant once I get some form of config working.
 
-Not the official branch. If you intend to use this, don't report bugs to Wolfvak - chances are it's because you chose to use something unstable rather than the well-tested official release.
+This is not the official branch. If you intend to use this, don't report bugs to Wolfvak - chances are it's because you chose to use something unstable and chances are buggy rather than the well-tested official release which does one job and does it well.
+
+tl;dr - Don't use this unless you plan to ditch your bootloader which probably much more sane than this.
 
 ## Credits
 

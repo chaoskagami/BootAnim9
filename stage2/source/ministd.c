@@ -19,6 +19,16 @@ void memset(void *dest, u32 filler, u32 size) {
 	return;
 }
 
+void strcat(char* a, char* b) {
+	while(*a != 0)
+		a++;
+
+	while(*b != 0)
+		*a++ = *b++;
+
+	*a = 0;
+}
+
 size_t strlen( const char* s ) {
 	size_t rc = 0;
 	while(s[rc])
@@ -28,6 +38,24 @@ size_t strlen( const char* s ) {
 
 int isspace(char c) {
 	if (c == ' ' || c == '\n' || c == '\t')
+		return 1;
+	return 0;
+}
+
+int isalpha(char c) {
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+		return 1;
+	return 0;
+}
+
+int isnum(char c) {
+	if (c >= '0' && c <= '9')
+		return 1;
+	return 0;
+}
+
+int isalnum(char c) {
+	if (isnum(c) || isalpha(c))
 		return 1;
 	return 0;
 }
